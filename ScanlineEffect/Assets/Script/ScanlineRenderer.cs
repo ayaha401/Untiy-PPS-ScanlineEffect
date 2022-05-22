@@ -16,6 +16,7 @@ public class ScanlineRenderer : PostProcessEffectRenderer<Scanline>
         var sheet = context.propertySheets.Get(Shader.Find("Custom/PPS_Scanline"));
 
         sheet.properties.SetFloat("_Brightness", settings.brightness);
+        sheet.properties.SetInt("_LineAmount",settings.lineAmount);
 
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }

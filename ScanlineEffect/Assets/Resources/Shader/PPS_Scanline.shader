@@ -17,6 +17,7 @@ Shader "Custom/PPS_Scanline"
             TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
 
             float _Brightness;
+            uint _LineAmount;
 
             float remap(float val, float2 inMinMax, float2 outMinMax)
             {
@@ -27,7 +28,7 @@ Shader "Custom/PPS_Scanline"
             {
                 float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
 
-                float lineCol=sin(i.texcoord.y*400.);
+                float lineCol=sin(i.texcoord.y*_LineAmount);
                 lineCol=remap(lineCol,float2(-1.,1),float2(_Brightness,1.));
                 return mainTexCol*lineCol;
             }

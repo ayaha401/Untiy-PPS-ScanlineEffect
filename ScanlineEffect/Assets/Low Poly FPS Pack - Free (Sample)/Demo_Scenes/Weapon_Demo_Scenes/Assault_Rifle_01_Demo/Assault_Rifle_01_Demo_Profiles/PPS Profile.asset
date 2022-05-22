@@ -82,4 +82,7 @@ MonoBehaviour:
     value: 1
   brightness:
     overrideState: 1
-    value: 0.8
+    value: 0.818
+  lineAmount:
+    overrideState: 1
+    value: 400
