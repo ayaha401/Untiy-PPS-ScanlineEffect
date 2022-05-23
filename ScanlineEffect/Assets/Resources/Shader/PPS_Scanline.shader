@@ -19,6 +19,17 @@ Shader "Custom/PPS_Scanline"
             float _Brightness;
             uint _LineAmount;
 
+            float2 distort(float2 p)
+            {
+                p=p*2.-1.;
+                float theta=atan2(p.y,p.x);
+                float r=length(p);
+                r=pow(r,1.2);
+                p.x=r*cos(theta);
+                p.y=r*sin(theta);
+                return .5*(p+1.);
+            }
+
             float remap(float val, float2 inMinMax, float2 outMinMax)
             {
                 return clamp(outMinMax.x+(val-inMinMax.x)*(outMinMax.y-outMinMax.x)/(inMinMax.y-inMinMax.x), outMinMax.x, outMinMax.y);
@@ -26,11 +37,17 @@ Shader "Custom/PPS_Scanline"
 
             float4 Frag (VaryingsDefault i) : SV_Target
             {
-                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
+                float2 p=distort(i.texcoord);
+                
+                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p);
+
 
                 float lineCol=sin(i.texcoord.y*_LineAmount);
                 lineCol=remap(lineCol,float2(-1.,1),float2(_Brightness,1.));
-                return mainTexCol*lineCol;
+
+                mainTexCol.rgb*=lineCol;
+
+                return mainTexCol;
             }
             ENDHLSL
         }
