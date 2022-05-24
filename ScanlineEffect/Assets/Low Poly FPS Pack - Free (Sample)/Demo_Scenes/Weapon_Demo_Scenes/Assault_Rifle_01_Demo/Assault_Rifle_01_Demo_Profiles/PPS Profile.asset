@@ -80,9 +80,12 @@ MonoBehaviour:
   enabled:
     overrideState: 1
     value: 1
+  distortPower:
+    overrideState: 1
+    value: 0
   brightness:
     overrideState: 1
-    value: 0.6
+    value: 0.72
   lineAmount:
     overrideState: 1
     value: 400

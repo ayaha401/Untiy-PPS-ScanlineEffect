@@ -16,15 +16,17 @@ Shader "Custom/PPS_Scanline"
 
             TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
 
+            float _DistortPower;
             float _Brightness;
             uint _LineAmount;
+            
 
             float2 distort(float2 p)
             {
                 p=p*2.-1.;
                 float theta=atan2(p.y,p.x);
                 float r=length(p);
-                r=pow(r,1.2);
+                r=pow(r,1.+_DistortPower);
                 p.x=r*cos(theta);
                 p.y=r*sin(theta);
                 return .5*(p+1.);
@@ -33,6 +35,13 @@ Shader "Custom/PPS_Scanline"
             float remap(float val, float2 inMinMax, float2 outMinMax)
             {
                 return clamp(outMinMax.x+(val-inMinMax.x)*(outMinMax.y-outMinMax.x)/(inMinMax.y-inMinMax.x), outMinMax.x, outMinMax.y);
+            }
+
+            float3 vignette(float2 p,float3 col)
+            {
+                p=abs(p*2.-1.);
+                p=pow(p,15);
+                return lerp(col.rgb, (0.).xxx, p.x+p.y);
             }
 
             float4 Frag (VaryingsDefault i) : SV_Target
@@ -47,6 +56,8 @@ Shader "Custom/PPS_Scanline"
 
                 mainTexCol.rgb*=lineCol;
 
+
+                mainTexCol.rgb=vignette(p,mainTexCol.rgb);
                 return mainTexCol;
             }
             ENDHLSL

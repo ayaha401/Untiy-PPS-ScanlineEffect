@@ -8,6 +8,7 @@ using System;
 [PostProcess(typeof(ScanlineRenderer), PostProcessEvent.AfterStack, "Custom/PPS_Scanline", true)]
 public class Scanline : PostProcessEffectSettings
 {
+    [Range(0.0f, 1.0f)] public FloatParameter distortPower = new FloatParameter { value = 0.0f };
     [Range(0.0f,1.0f)]public FloatParameter brightness = new FloatParameter{ value = 0.8f };
     public IntParameter lineAmount = new IntParameter{value = 400};
 }
