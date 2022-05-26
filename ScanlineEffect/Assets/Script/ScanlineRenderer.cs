@@ -18,7 +18,14 @@ public class ScanlineRenderer : PostProcessEffectRenderer<Scanline>
         sheet.properties.SetFloat("_DistortPower", settings.distortPower);
 
         sheet.properties.SetFloat("_Brightness", settings.brightness);
-        sheet.properties.SetInt("_LineAmount",settings.lineAmount);
+        sheet.properties.SetInt("_LineAmount", settings.lineAmount);
+
+        if (settings.useVignette != null)
+        {
+            float vignetteToggle = settings.useVignette == true ? 1.0f : 0.0f;
+            sheet.properties.SetFloat("_UseVignette", vignetteToggle);
+        }
+
 
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }

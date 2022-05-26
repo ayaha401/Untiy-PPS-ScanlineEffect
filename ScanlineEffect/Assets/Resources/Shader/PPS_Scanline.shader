@@ -19,6 +19,7 @@ Shader "Custom/PPS_Scanline"
             float _DistortPower;
             float _Brightness;
             uint _LineAmount;
+            float _UseVignette;
             
 
             float2 distort(float2 p)

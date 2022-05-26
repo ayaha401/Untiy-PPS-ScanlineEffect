@@ -89,3 +89,6 @@ MonoBehaviour:
   lineAmount:
     overrideState: 1
     value: 400
+  useVignette:
+    overrideState: 0
+    value: 1
