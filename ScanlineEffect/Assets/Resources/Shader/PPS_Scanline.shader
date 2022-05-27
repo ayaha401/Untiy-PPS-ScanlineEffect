@@ -57,8 +57,8 @@ Shader "Custom/PPS_Scanline"
 
                 mainTexCol.rgb*=lineCol;
 
-
-                mainTexCol.rgb=vignette(p,mainTexCol.rgb);
+                mainTexCol.rgb = _UseVignette == 1. ? vignette(p,mainTexCol.rgb) : mainTexCol.rgb;
+                // mainTexCol.rgb=vignette(p,mainTexCol.rgb);
                 return mainTexCol;
             }
             ENDHLSL
