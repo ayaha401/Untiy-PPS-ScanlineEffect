@@ -35,10 +35,13 @@ MonoBehaviour:
     value: 0
   brightness:
     overrideState: 1
-    value: 0.61
+    value: 0.691
   lineAmount:
     overrideState: 1
     value: 400
+  lineMoveSpeed:
+    overrideState: 1
+    value: 0
   useVignette:
     overrideState: 1
     value: 1

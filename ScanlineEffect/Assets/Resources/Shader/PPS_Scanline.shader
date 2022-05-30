@@ -13,6 +13,7 @@ Shader "Custom/PPS_Scanline"
             #pragma fragment Frag
 
             #include "Packages/com.unity.postprocessing/PostProcessing/Shaders/StdLib.hlsl"
+            #include "Noise.hlsl"
 
             TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
 
@@ -20,6 +21,7 @@ Shader "Custom/PPS_Scanline"
             float _Brightness;
             uint _LineAmount;
             float _UseVignette;
+            float _LineMoveSpeed;
             
 
             float2 distort(float2 p)
@@ -38,11 +40,11 @@ Shader "Custom/PPS_Scanline"
                 return clamp(outMinMax.x+(val-inMinMax.x)*(outMinMax.y-outMinMax.x)/(inMinMax.y-inMinMax.x), outMinMax.x, outMinMax.y);
             }
 
-            float3 vignette(float2 p,float3 col)
+            float3 vignette(float2 p,float3 col,float flag)
             {
                 p=abs(p*2.-1.);
                 p=pow(p,15);
-                return lerp(col.rgb, (0.).xxx, p.x+p.y);
+                return lerp(col.rgb, (0.).xxx + (col.rgb*(1.-flag)), p.x+p.y);
             }
 
             float4 Frag (VaryingsDefault i) : SV_Target
@@ -51,15 +53,17 @@ Shader "Custom/PPS_Scanline"
                 
                 float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p);
 
-
-                float lineCol=sin(i.texcoord.y*_LineAmount);
+                float lineCol=sin((i.texcoord.y*_LineAmount)+_Time.y*_LineMoveSpeed);
                 lineCol=remap(lineCol,float2(-1.,1),float2(_Brightness,1.));
 
                 mainTexCol.rgb*=lineCol;
+                mainTexCol.rgb=vignette(p, mainTexCol.rgb, _UseVignette);
+                
 
-                mainTexCol.rgb = _UseVignette == 1. ? vignette(p,mainTexCol.rgb) : mainTexCol.rgb;
-                // mainTexCol.rgb=vignette(p,mainTexCol.rgb);
-                return mainTexCol;
+
+                float4 testCol;
+                float a=blockNoise(p,8.);
+                return float4(a,a,a,1.);
             }
             ENDHLSL
         }
