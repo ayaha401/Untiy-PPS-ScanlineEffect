@@ -50,8 +50,13 @@ Shader "Custom/PPS_Scanline"
             float4 Frag (VaryingsDefault i) : SV_Target
             {
                 float2 p=distort(i.texcoord);
+
+                float noise = perlinNoise(i.texcoord.yy+_Time.y*10., 10.);
+                noise = remap(noise, float2(0,1),float2(-.05,.05));
                 
-                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p);
+                float strength = pow(perlinNoise((float2)_Time.y, 10.),4.);
+
+                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p+(noise*strength));
 
                 float lineCol=sin((i.texcoord.y*_LineAmount)+_Time.y*_LineMoveSpeed);
                 lineCol=remap(lineCol,float2(-1.,1),float2(_Brightness,1.));
@@ -62,8 +67,9 @@ Shader "Custom/PPS_Scanline"
 
 
                 float4 testCol;
-                float a=blockNoise(p,8.);
-                return float4(a,a,a,1.);
+                float3 a = (float3)noise*strength;
+                
+                return float4(mainTexCol.rgb,1.);
             }
             ENDHLSL
         }
