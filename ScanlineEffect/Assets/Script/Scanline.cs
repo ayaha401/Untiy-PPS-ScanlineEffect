@@ -14,4 +14,5 @@ public class Scanline : PostProcessEffectSettings
     public IntParameter lineMoveSpeed = new IntParameter { value = 100 };
 
     public BoolParameter useVignette = new BoolParameter { value = true };
+    public BoolParameter useGlitch = new BoolParameter { value = false };
 }

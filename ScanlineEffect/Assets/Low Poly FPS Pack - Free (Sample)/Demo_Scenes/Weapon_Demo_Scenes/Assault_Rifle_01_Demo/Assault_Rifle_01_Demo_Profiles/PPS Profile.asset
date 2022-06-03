@@ -32,7 +32,7 @@ MonoBehaviour:
     value: 1
   distortPower:
     overrideState: 1
-    value: 0.247
+    value: 0
   brightness:
     overrideState: 1
     value: 0.922
@@ -43,5 +43,8 @@ MonoBehaviour:
     overrideState: 1
     value: 0
   useVignette:
+    overrideState: 1
+    value: 1
+  useGlitch:
     overrideState: 1
     value: 1

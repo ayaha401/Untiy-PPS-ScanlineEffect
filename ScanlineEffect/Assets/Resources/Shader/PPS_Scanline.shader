@@ -22,6 +22,7 @@ Shader "Custom/PPS_Scanline"
             uint _LineAmount;
             float _UseVignette;
             float _LineMoveSpeed;
+            float _UseGlitch;
             
 
             float2 distort(float2 p)
@@ -52,22 +53,17 @@ Shader "Custom/PPS_Scanline"
                 float2 p=distort(i.texcoord);
 
                 float noise = perlinNoise(i.texcoord.yy+_Time.y*10., 10.);
-                noise = remap(noise, float2(0,1),float2(-.05,.05));
+                noise = (noise*2.-1.)*.05;
                 
                 float strength = pow(perlinNoise((float2)_Time.y, 10.),4.);
 
-                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p+(noise*strength));
+                float4 mainTexCol=SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, p+(noise*strength*_UseGlitch));
 
                 float lineCol=sin((i.texcoord.y*_LineAmount)+_Time.y*_LineMoveSpeed);
                 lineCol=remap(lineCol,float2(-1.,1),float2(_Brightness,1.));
 
                 mainTexCol.rgb*=lineCol;
                 mainTexCol.rgb=vignette(p, mainTexCol.rgb, _UseVignette);
-                
-
-
-                float4 testCol;
-                float3 a = (float3)noise*strength;
                 
                 return float4(mainTexCol.rgb,1.);
             }

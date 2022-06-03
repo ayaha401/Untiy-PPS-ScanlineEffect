@@ -21,11 +21,12 @@ public class ScanlineRenderer : PostProcessEffectRenderer<Scanline>
         sheet.properties.SetInt("_LineAmount", settings.lineAmount);
         sheet.properties.SetFloat("_LineMoveSpeed", settings.lineMoveSpeed);
 
-        if (settings.useVignette != null)
-        {
-            float vignetteToggle = settings.useVignette == true ? 1.0f : 0.0f;
-            sheet.properties.SetFloat("_UseVignette", vignetteToggle);
-        }
+        
+        float vignetteToggle = settings.useVignette == true ? 1.0f : 0.0f;
+        sheet.properties.SetFloat("_UseVignette", vignetteToggle);
+
+        float glitchToggle = settings.useGlitch == true ? 1.0f : 0.0f;
+        sheet.properties.SetFloat("_UseGlitch", glitchToggle);
 
         context.command.BlitFullscreenTriangle(context.source, context.destination, sheet, 0);
     }
