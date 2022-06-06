@@ -65,8 +65,7 @@ Shader "Custom/PPS_Scanline"
                 mainTexCol.rgb*=lineCol;
                 mainTexCol.rgb=vignette(p, mainTexCol.rgb, _UseVignette);
                 
-                float3 a = (float3)cellularNoise(i.texcoord, 5.);
-                return float4(a.xxx,1.);
+                return float4(mainTexCol.rgb,1.);
             }
             ENDHLSL
         }
